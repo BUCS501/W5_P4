@@ -1,4 +1,4 @@
-package com.example.w5_p4;
+//package com.example.w5_p4;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +19,13 @@ public class BoggleGame {
     public BoggleGame() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
         visited = new boolean[BOARD_SIZE][BOARD_SIZE];
-        possibleWords = readDictionaryFile("./app/src/main/res/values/words.txt");
+        try {
+            // Assuming this is being ran in a unix environment
+            possibleWords = readDictionaryFile("./../../../../res/values/words.txt");
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
         foundWords = new HashSet<>();
         lastLetter = new int[] {-1, -1};
         currWord = "";
@@ -226,7 +232,14 @@ public class BoggleGame {
     public static HashSet<String> readDictionaryFile(String fileName) throws FileNotFoundException {
         // Initializes the HashSet to hold all unique words
         HashSet<String> wordSet = new HashSet<String>();
-        Scanner scanner = new Scanner(new File(fileName));
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File(fileName));
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            throw e;
+        }
         while (scanner.hasNextLine()) {
             wordSet.add(scanner.nextLine());
         }
@@ -241,4 +254,12 @@ public class BoggleGame {
             System.out.println();
         }
     }
+
+    // public static void main(String[] args) {
+    //     // creates a new instance of BoggleGame and prints the board
+    //     BoggleGame game = new BoggleGame();
+    //     game.printBoard();
+    //     String dir = System.getProperty("user.dir");
+    //     System.out.println(dir);
+    // }
 }
