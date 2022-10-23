@@ -1,4 +1,4 @@
-//package com.example.w5_p4;
+package com.example.w5_p4;
 
 import java.io.File;
 import java.io.FileNotFoundException;
