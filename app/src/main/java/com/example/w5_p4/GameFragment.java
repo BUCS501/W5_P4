@@ -172,7 +172,7 @@ public class GameFragment extends Fragment {
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
             }
         }
-        updateWord("<Current Word>");
+        updateWord(getResources().getString(R.string.current_word));
     }
 
 
