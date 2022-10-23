@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GameFragment">
+
+    <TextView
+        android:id="@+id/fragment_game_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_word"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    //gridlayout
+    <GridLayout
+        android:id="@+id/fragment_game_button_grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:columnCount="4"
+        android:rowCount="4"
+        ></GridLayout>
+
+    // Current word display for boggle
+    <TextView
+        android:id="@+id/fragment_game_current_word_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/current_word"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
+        >
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:layout_weight="1"/>
+        //Button to clear board
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/clear" />
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+</LinearLayout>

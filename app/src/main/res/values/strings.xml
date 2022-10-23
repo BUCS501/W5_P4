@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">W5_P4</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_game">New Game</string>
+    <string name="enter_word">Enter a word then hit submit</string>
+    <string name="current_word">Current word</string>
+    <string name="clear">Clear</string>
+    <string name="submit">Submit</string>
 </resources>
