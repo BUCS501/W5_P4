@@ -1,5 +1,6 @@
 package com.example.w5_p4;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,45 +21,59 @@ import android.widget.GridLayout;
  */
 public class GameFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Callbacks mCallbacks = sDummyCallbacks;
+
+    public interface Callbacks {
+        public BoggleGame getGame( );
+        public boolean pressLetter( int row, int col );
+
+    }
+    private static Callbacks sDummyCallbacks = new Callbacks( ) {
+        public BoggleGame getGame( ) {
+            return null;
+        }
+        public boolean pressLetter( int row,int col){return false;};
+
+    };
 
     private Button[][] buttons = new Button[4][4];
+    private Button clear_btn;
+    private Button submit_btn;
 
     public GameFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GameFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static GameFragment newInstance(String param1, String param2) {
+    public static GameFragment newInstance() {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    public void onAttach( Context context ) {
+        super.onAttach( context );
+        if ( !( context instanceof Callbacks ) ) {
+            throw new IllegalStateException(
+                    "Context must implement fragment's callbacks." );
+        }
+        mCallbacks = ( Callbacks ) context;
+    }
+
+    public void onDetach( ) {
+        super.onDetach( );
+        mCallbacks = sDummyCallbacks;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -72,12 +88,32 @@ public class GameFragment extends Fragment {
     public void onStart() {
         super.onStart();
         View view = getView();
+        clear_btn = (Button) view.findViewById(R.id.clear_button);
+        submit_btn = (Button) view.findViewById(R.id.submit_button);
+
+        clear_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.getGame().clearButton();;
+                updateButtons();
+
+            }
+        });
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.getGame().submitButton();
+                updateButtons();
+            }
+        });
         GridLayout gridLayout = view.findViewById(R.id.fragment_game_button_grid_layout);
         //add a 4x4 grid of buttons to the gridlayout programmatically
         Point size = new Point();
         getActivity().getWindowManager().getDefaultDisplay().getSize(size);
         int w = (size.x / 4);
         int h = (size.y / 8);
+        BoggleGame game = mCallbacks.getGame();
+        char[][] board = game.getBoard();
 
 
         for (int i = 0; i < 4; i++) {
@@ -88,9 +124,47 @@ public class GameFragment extends Fragment {
                 buttons[i][j].setPadding(0, 0, 0, 0);
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
                 buttons[i][j].setGravity(Gravity.CENTER);
+                buttons[i][j].setText(""+board[i][j])   ;
+                int finalJ = j;
+                int finalI = i;
+                buttons[i][j].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!mCallbacks.pressLetter(finalI, finalJ)) {
+                            return;
+                        }
+                        Button b = (Button) v;
+                        b.setBackgroundColor(getResources().getColor(R.color.teal_200));
+
+
+                    }
+                });
                 gridLayout.addView(buttons[i][j], w, h);
 
             }
         }
+
+
     }
+    public void updateWord( String word ) {
+        //update the word on the screen
+        View view = getView();
+        TextView wordView = view.findViewById(R.id.fragment_game_current_word_text_view);
+        wordView.setText(word);
+    }
+
+    public void updateButtons( ) {
+        //update the buttons on the screen
+        BoggleGame game = mCallbacks.getGame();
+        char[][] board = game.getBoard();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                buttons[i][j].setText(""+board[i][j]);
+                buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
+            }
+        }
+        updateWord("<Current Word>");
+    }
+
+
 }

@@ -3,14 +3,26 @@ package com.example.w5_p4;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GameFragment.Callbacks {
+
+
+    private BoggleGame game;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if ( game == null )
+            game = new BoggleGame( );
+
+
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         if( fragmentManager.findFragmentById( R.id.game_fragment ) == null ) {
             androidx.fragment.app.FragmentTransaction transaction = fragmentManager.beginTransaction( );
@@ -27,6 +39,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public BoggleGame getGame( ) {
+        return game;
+    }
+
+    public boolean pressLetter( int row, int col ) {
+        char res = game.letterButton( row, col );
+
+        if (res == ' ') {
+            Toast.makeText(this, "Invalid move", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        String currentWord = game.getCurrWord();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        GameFragment gFragment = ( GameFragment )
+                fragmentManager.findFragmentById( R.id.game_fragment );
+        gFragment.updateWord(currentWord);
+
+
+        return true;
+    }
+
 
 
 

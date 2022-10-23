@@ -1,7 +1,11 @@
 package com.example.w5_p4;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class BoggleGame {
@@ -19,9 +23,10 @@ public class BoggleGame {
     public BoggleGame() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
         visited = new boolean[BOARD_SIZE][BOARD_SIZE];
+        String dir = System.getProperty("user.dir");
         try {
             // Assuming this is being ran in a unix environment
-            possibleWords = readDictionaryFile("app/src/main/assets/words.txt");
+            possibleWords = readDictionaryFile("/root/app/src/main/assets/words.txt");
         }
         catch (FileNotFoundException e) {
             System.out.println("File not found");
