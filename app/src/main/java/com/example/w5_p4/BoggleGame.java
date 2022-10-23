@@ -1,10 +1,12 @@
 package com.example.w5_p4;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
+import java.io.InputStream;
+import java.util.*;
 
 public class BoggleGame {
 
@@ -21,15 +23,17 @@ public class BoggleGame {
     public BoggleGame() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
         visited = new boolean[BOARD_SIZE][BOARD_SIZE];
-        String dir = System.getProperty("user.dir");
-        try {
-            // Assuming this is being ran in a unix environment
-            possibleWords = readDictionaryFile("/root/app/src/main/assets/words.txt");
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
+        // commented out as dictionary has to be initialized in MainActivity in order to access words.txt file within Android assets folder
+//        String dir = System.getProperty("user.dir");
+//        try {
+//            // Assuming this is being ran in a unix environment
+//            possibleWords = readDictionaryFile("/root/app/src/main/assets/words.txt");
+//        }
+//        catch (FileNotFoundException e) {
+//            System.out.println("File not found");
+//        }
         foundWords = new HashSet<>();
-        lastLetter = new int[]{-1, -1};
+        lastLetter = new int[] {-1, -1};
         currWord = "";
         gameScore = 0;
         randomizeBoard();
@@ -161,7 +165,7 @@ public class BoggleGame {
         if (vowelCount < 2 || word.length() < MIN_WORD_LENGTH || foundWords.contains(word) || !possibleWords.contains(word)) {
             return -10;
         }
-
+        
         return score;
     }
 
@@ -237,7 +241,8 @@ public class BoggleGame {
         Scanner scanner;
         try {
             scanner = new Scanner(new File(fileName));
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             System.out.println("File not found");
             throw e;
         }
