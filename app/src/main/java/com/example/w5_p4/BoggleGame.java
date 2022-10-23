@@ -23,14 +23,15 @@ public class BoggleGame {
     public BoggleGame() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
         visited = new boolean[BOARD_SIZE][BOARD_SIZE];
-        String dir = System.getProperty("user.dir");
-        try {
-            // Assuming this is being ran in a unix environment
-            possibleWords = readDictionaryFile("/root/app/src/main/assets/words.txt");
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
+        // commented out as dictionary has to be initialized in MainActivity in order to access words.txt file within Android assets folder
+//        String dir = System.getProperty("user.dir");
+//        try {
+//            // Assuming this is being ran in a unix environment
+//            possibleWords = readDictionaryFile("/root/app/src/main/assets/words.txt");
+//        }
+//        catch (FileNotFoundException e) {
+//            System.out.println("File not found");
+//        }
         foundWords = new HashSet<>();
         lastLetter = new int[] {-1, -1};
         currWord = "";

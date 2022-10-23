@@ -4,8 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements GameFragment.Callbacks {
 
@@ -20,8 +30,12 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
         if ( game == null )
             game = new BoggleGame( );
 
-
-
+        AssetManager am = getAssets( );
+        try {
+            game.setPossibleWords( readDictionaryFile( am ) );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         if( fragmentManager.findFragmentById( R.id.game_fragment ) == null ) {
@@ -59,6 +73,26 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
 
 
         return true;
+    }
+
+    public HashSet<String> readDictionaryFile(AssetManager am) throws IOException {
+        // Initializes the HashSet to hold all unique words
+        HashSet<String> wordSet = new HashSet<String>();
+
+
+        InputStream is = null;
+        try {
+            is = am.open( "words.txt" );
+        } catch ( Exception e ) {
+            Toast.makeText( this, "Error opening words.txt", Toast.LENGTH_LONG ).show( );
+        }
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+
+        while (bufferedReader.ready()) {
+            wordSet.add(bufferedReader.readLine());
+        }
+        return wordSet;
     }
 
 
