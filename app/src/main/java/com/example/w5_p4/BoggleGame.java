@@ -162,7 +162,7 @@ public class BoggleGame {
         }
 
         // Checks if word is missing vowels or is too short or has already been found or is not in the dictionary of words
-        if (vowelCount < 2 || word.length() < MIN_WORD_LENGTH || foundWords.contains(word) || !possibleWords.contains(word)) {
+        if (vowelCount < 2 || word.length() < MIN_WORD_LENGTH || foundWords.contains(word) || !possibleWords.contains(word.toLowerCase())) {
             return -10;
         }
         

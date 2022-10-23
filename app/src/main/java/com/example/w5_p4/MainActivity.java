@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity implements GameFragment.Callbacks {
+public class MainActivity extends AppCompatActivity implements GameFragment.Callbacks, ScoreFragment.Callbacks {
 
 
     private BoggleGame game;
@@ -27,25 +27,25 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if ( game == null )
-            game = new BoggleGame( );
+        if (game == null)
+            game = new BoggleGame();
 
-        AssetManager am = getAssets( );
+        AssetManager am = getAssets();
         try {
-            game.setPossibleWords( readDictionaryFile( am ) );
+            game.setPossibleWords(readDictionaryFile(am));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if( fragmentManager.findFragmentById( R.id.game_fragment ) == null ) {
-            androidx.fragment.app.FragmentTransaction transaction = fragmentManager.beginTransaction( );
+        if (fragmentManager.findFragmentById(R.id.game_fragment) == null) {
+            androidx.fragment.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
             GameFragment fragment = new GameFragment();
-            transaction.add(R.id.game_fragment, fragment );
-            transaction.commit( );
+            transaction.add(R.id.game_fragment, fragment);
+            transaction.commit();
         }
 
-        if(fragmentManager.findFragmentById(R.id.score_fragment) == null) {
+        if (fragmentManager.findFragmentById(R.id.score_fragment) == null) {
             androidx.fragment.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
             ScoreFragment fragment = new ScoreFragment();
             transaction.add(R.id.score_fragment, fragment);
@@ -54,12 +54,12 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
 
     }
 
-    public BoggleGame getGame( ) {
+    public BoggleGame getGame() {
         return game;
     }
 
-    public boolean pressLetter( int row, int col ) {
-        char res = game.letterButton( row, col );
+    public boolean pressLetter(int row, int col) {
+        char res = game.letterButton(row, col);
 
         if (res == ' ') {
             Toast.makeText(this, "Invalid move", Toast.LENGTH_SHORT).show();
@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
         }
         String currentWord = game.getCurrWord();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        GameFragment gFragment = ( GameFragment )
-                fragmentManager.findFragmentById( R.id.game_fragment );
+        GameFragment gFragment = (GameFragment)
+                fragmentManager.findFragmentById(R.id.game_fragment);
         gFragment.updateWord(currentWord);
 
 
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
 
         InputStream is = null;
         try {
-            is = am.open( "words.txt" );
-        } catch ( Exception e ) {
-            Toast.makeText( this, "Error opening words.txt", Toast.LENGTH_LONG ).show( );
+            is = am.open("words.txt");
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening words.txt", Toast.LENGTH_LONG).show();
         }
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
@@ -96,8 +96,23 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Call
     }
 
 
+    public void updateScore() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ScoreFragment sFragment = (ScoreFragment)
+                fragmentManager.findFragmentById(R.id.score_fragment);
+        sFragment.updateScore(game.getGameScore());
 
+    }
 
+    public void newGame(){
+        game.resetGame();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        GameFragment gFragment = (GameFragment)
+                fragmentManager.findFragmentById(R.id.game_fragment);
+        gFragment.updateButtons();
+        ScoreFragment sFragment = (ScoreFragment)
+                fragmentManager.findFragmentById(R.id.score_fragment);
+        sFragment.updateScore(game.getGameScore());
 
-
+    }
 }

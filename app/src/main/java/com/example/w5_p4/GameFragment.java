@@ -41,8 +41,6 @@ public class GameFragment extends Fragment {
             return false;
         }
 
-        ;
-
     };
 
     private Button[][] buttons = new Button[4][4];
