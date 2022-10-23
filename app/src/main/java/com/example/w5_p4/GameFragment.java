@@ -72,6 +72,9 @@ public class GameFragment extends Fragment {
         super.onStart();
         View view = getView();
         GridLayout gridLayout = view.findViewById(R.id.fragment_game_button_grid_layout);
+
+        int h = gridLayout.getHeight();
+        int w = gridLayout.getWidth();
         //add a 4x4 grid of buttons to the gridlayout programmatically
 
 
@@ -83,7 +86,8 @@ public class GameFragment extends Fragment {
                 buttons[i][j].setPadding(0, 0, 0, 0);
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
                 buttons[i][j].setGravity(Gravity.CENTER);
-                gridLayout.addView(buttons[i][j]);
+                buttons[i][j].setColumnWeight(1);
+                gridLayout.addView(buttons[i][j],w/4,h/4);
 
             }
         }
