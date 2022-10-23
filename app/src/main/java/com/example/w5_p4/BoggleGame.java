@@ -21,7 +21,7 @@ public class BoggleGame {
         visited = new boolean[BOARD_SIZE][BOARD_SIZE];
         try {
             // Assuming this is being ran in a unix environment
-            possibleWords = readDictionaryFile("./../../../../res/values/words.txt");
+            possibleWords = readDictionaryFile("app/src/main/assets/words.txt");
         }
         catch (FileNotFoundException e) {
             System.out.println("File not found");
