@@ -1,5 +1,6 @@
 package com.example.w5_p4;
 
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -72,10 +73,11 @@ public class GameFragment extends Fragment {
         super.onStart();
         View view = getView();
         GridLayout gridLayout = view.findViewById(R.id.fragment_game_button_grid_layout);
-
-        int h = gridLayout.getHeight();
-        int w = gridLayout.getWidth();
         //add a 4x4 grid of buttons to the gridlayout programmatically
+        Point size = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(size);
+        int w = (size.x / 4);
+        int h = (size.y / 8);
 
 
         for (int i = 0; i < 4; i++) {
@@ -86,8 +88,7 @@ public class GameFragment extends Fragment {
                 buttons[i][j].setPadding(0, 0, 0, 0);
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
                 buttons[i][j].setGravity(Gravity.CENTER);
-                buttons[i][j].setColumnWeight(1);
-                gridLayout.addView(buttons[i][j],w/4,h/4);
+                gridLayout.addView(buttons[i][j], w, h);
 
             }
         }
