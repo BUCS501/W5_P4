@@ -3,9 +3,6 @@ package com.example.w5_p4;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,15 +24,24 @@ public class GameFragment extends Fragment {
     private Callbacks mCallbacks = sDummyCallbacks;
 
     public interface Callbacks {
-        public BoggleGame getGame( );
-        public boolean pressLetter( int row, int col );
+        public BoggleGame getGame();
+        public void updateScore();
+        public boolean pressLetter(int row, int col);
 
     }
-    private static Callbacks sDummyCallbacks = new Callbacks( ) {
-        public BoggleGame getGame( ) {
+
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+        public BoggleGame getGame() {
             return null;
         }
-        public boolean pressLetter( int row,int col){return false;};
+        public void updateScore() {
+        }
+
+        public boolean pressLetter(int row, int col) {
+            return false;
+        }
+
+        ;
 
     };
 
@@ -55,17 +63,17 @@ public class GameFragment extends Fragment {
     }
 
 
-    public void onAttach( Context context ) {
-        super.onAttach( context );
-        if ( !( context instanceof Callbacks ) ) {
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (!(context instanceof Callbacks)) {
             throw new IllegalStateException(
-                    "Context must implement fragment's callbacks." );
+                    "Context must implement fragment's callbacks.");
         }
-        mCallbacks = ( Callbacks ) context;
+        mCallbacks = (Callbacks) context;
     }
 
-    public void onDetach( ) {
-        super.onDetach( );
+    public void onDetach() {
+        super.onDetach();
         mCallbacks = sDummyCallbacks;
     }
 
@@ -94,7 +102,8 @@ public class GameFragment extends Fragment {
         clear_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.getGame().clearButton();;
+                mCallbacks.getGame().clearButton();
+
                 updateButtons();
 
             }
@@ -104,6 +113,7 @@ public class GameFragment extends Fragment {
             public void onClick(View v) {
                 mCallbacks.getGame().submitButton();
                 updateButtons();
+                mCallbacks.updateScore();
             }
         });
         GridLayout gridLayout = view.findViewById(R.id.fragment_game_button_grid_layout);
@@ -124,7 +134,7 @@ public class GameFragment extends Fragment {
                 buttons[i][j].setPadding(0, 0, 0, 0);
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
                 buttons[i][j].setGravity(Gravity.CENTER);
-                buttons[i][j].setText(""+board[i][j])   ;
+                buttons[i][j].setText("" + board[i][j]);
                 int finalJ = j;
                 int finalI = i;
                 buttons[i][j].setOnClickListener(new View.OnClickListener() {
@@ -146,20 +156,21 @@ public class GameFragment extends Fragment {
 
 
     }
-    public void updateWord( String word ) {
+
+    public void updateWord(String word) {
         //update the word on the screen
         View view = getView();
         TextView wordView = view.findViewById(R.id.fragment_game_current_word_text_view);
         wordView.setText(word);
     }
 
-    public void updateButtons( ) {
+    public void updateButtons() {
         //update the buttons on the screen
         BoggleGame game = mCallbacks.getGame();
         char[][] board = game.getBoard();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                buttons[i][j].setText(""+board[i][j]);
+                buttons[i][j].setText("" + board[i][j]);
                 buttons[i][j].setBackgroundColor(getResources().getColor(R.color.white));
             }
         }
